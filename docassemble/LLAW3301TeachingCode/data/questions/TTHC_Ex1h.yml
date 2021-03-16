@@ -1,0 +1,112 @@
+# Federal Court Form 1
+---
+objects:
+  - endpoint: DADict
+---
+# Welcome screen. 
+mandatory: True
+question: Welcome To Federal Court!
+subquestion: |
+  Welcome to Federal Court Services.  We hope you enjoy
+  using it!
+
+  ***Disclaimer:***  
+  **Should state form must be checked by a lawyer and that this app does not give legal advise.**
+
+  If you continue you accept these terms.
+buttons:
+  - "I accept and want to continue": continue
+  - "I do not accept": exit
+    url: https://www.fedcourt.gov.au/
+---
+# This code checks for the court selection
+mandatory: True
+code: |
+  if court == 'Federal Court' or court == 'Federal Circuit Court':
+    endpoint['eligible']
+  else:
+    endpoint['ineligible']
+---
+# This question asks for which court the form is used for.
+question: Court Selection
+fields:
+  - Which court will this form be completed for?: courtSelection
+    choices:
+      - Supreme Court
+      - District Court
+      - Magistrates Court
+      - Federal Court
+      - Federal Circuit Court
+---
+# This is any other court selection
+event: endpoint['ineligible']
+question: Court is not supported
+subquestion:
+  This app will only prepare forms for FCA and FCCT. Please contact Federal Court Hotline for more information.
+buttons:
+  - Exit: exit
+    url: https://www.fedcourt.gov.au/
+  - Restart: restart
+---
+# This is the eligible endpoint.
+event: endpoint['eligible']
+---
+question: Please fill in the following information.
+fields:
+  - Party 1: party1
+  - Party 2: party2
+---
+question: District Registry
+fields:
+  - no label: state
+choices:
+  - ACT
+  - NSW
+  - VIC
+  - SA
+  - QLD
+  - WA
+  - TAS
+  - NT
+---
+question: Division
+fields:
+  - no label: division
+  choices: 
+    - Corporations
+    - Criminal
+    - Employment
+    - General
+---
+question: Applicant
+fields:
+  - Name of First Applicant: applicant
+---
+question: Respondent
+fields:
+  - Name of First Respondent: respondent
+---
+question: Date
+fields: 
+  - no label: date
+  datatype: date
+---
+question: Signed by
+fields: 
+  - Applicant: applicantName
+  - Layer: layerName
+---
+question: |
+  Assembling a document from a PDF
+  template
+subquestion: |
+  This interview will fill fields in
+  a .pdf template.  You can
+  [download the template] to see what
+  it looks like.
+  [download the template]: ${ url_of('FCA_form001_20110801.pdf') }
+mandatory: True
+buttons:
+  - Exit: exit
+  - Restart: restart
+---
